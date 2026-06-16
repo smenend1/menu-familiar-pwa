@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 
+// --- BASE DE DATOS DE COMIDAS (Categorizada por tus preferencias) ---
 const MENU_OPTIONS = {
   desayuno: [
     "Fruta fresca (Sandía, melón, uva) + Yogur natural",
@@ -33,9 +34,10 @@ const MENU_OPTIONS = {
 const DIAS = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
 
 function App() {
-  const [tipoDia, setTipoDia] = useState('laborable'); 
+  const [tipoDia, setTipoDia] = useState('laborable'); // 'laborable' o 'finde'
   const [menus, setMenus] = useState({});
 
+  // Manejar el cambio táctil en los desplegables
   const handleSelectChange = (dia, comida, valor) => {
     setMenus(prev => ({
       ...prev,
@@ -43,6 +45,7 @@ function App() {
     }));
   };
 
+  // Autocompletar aleatoriamente el bloque de días visible
   const handleRandomAutofill = () => {
     const diasAModificar = tipoDia === 'laborable' ? DIAS.slice(0, 5) : DIAS.slice(5, 7);
     const nuevoMenu = { ...menus };
@@ -59,6 +62,7 @@ function App() {
     setMenus(nuevoMenu);
   };
 
+  // Limpiar los días que están visibles en la pantalla
   const handleClearMenu = () => {
     const diasAModificar = tipoDia === 'laborable' ? DIAS.slice(0, 5) : DIAS.slice(5, 7);
     const nuevoMenu = { ...menus };
@@ -77,6 +81,7 @@ function App() {
         <p className="text-sm text-slate-500">2 Adultos y 2 peques (5 y 2 años) • Dieta Mediterránea</p>
       </header>
 
+      {/* Selectores de Bloque de Días */}
       <div className="mb-4 flex justify-center gap-3">
         <button 
           onClick={() => setTipoDia('laborable')}
@@ -92,6 +97,7 @@ function App() {
         </button>
       </div>
 
+      {/* Botones de acción rápida */}
       <div className="mb-6 flex justify-center gap-3">
         <button 
           onClick={handleRandomAutofill}
@@ -107,6 +113,7 @@ function App() {
         </button>
       </div>
 
+      {/* Grid de tarjetas por día */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {diasAMostrar.map(dia => (
           <div key={dia} className="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
@@ -120,7 +127,7 @@ function App() {
                   {comida}
                 </label>
                 <select 
-                  className="w-full bg-slate-50 border border-slate-200 text-slate-700 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none cursor-pointer"
+                  className="w-full bg-slate-50 border border-slate-200 text-slate-700 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none cursor-pointer touch-manipulation"
                   value={menus[dia]?.[comida] || ""}
                   onChange={(e) => handleSelectChange(dia, comida, e.target.value)}
                 >
